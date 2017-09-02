@@ -13,8 +13,10 @@ import scipy.misc as sp
 import numpy.linalg as alg
 import os
 import sys
+
 #Clearing interpreter
 os.system('cls')
+
 #Function definitions
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
@@ -26,13 +28,11 @@ def random_init(input_layer_size, hidden_layer_size, episilon = 0.12):
     rando = np.random.rand(input_layer_size, 1 + hidden_layer_size)
     return (rando * 2 * episilon) - episilon
 
-def img_process(path, image_name):
-    """Will check whether file is an image file
-        Convert image into numpy array if file has an image type
-    """
+def is_img(image):
+    """Checks if file is an image"""
     formats = ['jpg', 'gif', 'jpeg', 'png', 'bmp']
-    file_type = image_name.split('.')
-    return None if file_type[-1].lower() not in formats else sp.imread(path + '\\' + image_name, flatten = True)
+    file_type = image.split('.')
+    return None if file_type[-1].lower() not in formats else image
 
 #ML implementation starts here
 try:
@@ -44,24 +44,31 @@ except:
     sys.exit()
 
 #ANN dimensions
-temp = img_process(img_path, files[1])
+temp = sp.imread(img_path + '\\' + files[1], flatten = True)
 input_layer_size = len(temp.ravel())            #I know, it's a shitty fix
 hidden_layer_size = 3
+img_list = []
+
+for item in files:
+    check = is_img(item)
+    if not check is None:
+        img_list.append(check)
 
 del temp                                   #Clear memory
-final_matrix = np.empty([input_layer_size, len(files)])
+final_array = np.zeros([len(img_list), input_layer_size])
 
+#Data/Image processing
 i = 0                                      #So we can change each row in the matrix
 
-for img in files:
-    i = i + 1
-    file_ = img_process(img_path, img)
+for img in img_list:
+    file_ = sp.imread(img_path + '\\' + img, flatten = True)
     if file_ is None:
         continue
 
     file_ = file_.ravel()
-    np.vstack([final_matrix, file_]) #Need to figure out a way to append to matrix
-    """Need to test this loop"""
+    final_array[i] = file_
+    i = i + 1
+#End Data/Image Processing
 
-#need to unroll each image and append one by one to a single numpy array
-print(final_matrix)
+#Algorithm Implementation
+print(final_array)
