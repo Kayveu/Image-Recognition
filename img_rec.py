@@ -5,7 +5,6 @@
          Therefore, numpy will allow a ML system to learn faster than in pandas
 
     Python 3.7
-    OpenCV not supported in this version of python
 """
 
 import numpy as np
@@ -61,14 +60,13 @@ final_array = np.zeros([len(img_list), input_layer_size])
 i = 0                                      #So we can change each row in the matrix
 
 for img in img_list:
+    #Using scipy instead of PIL Image library because we want to flatten easier
     file_ = sp.imread(img_path + '\\' + img, flatten = True)
-    if file_ is None:
-        continue
-
     file_ = file_.ravel()
     final_array[i] = file_
     i = i + 1
 #End Data/Image Processing
 
 #Algorithm Implementation
-print(final_array)
+
+#print(len(final_array))
