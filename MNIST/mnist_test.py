@@ -1,4 +1,4 @@
-"""Image Recognition using an Artificial Neural Network with Back Propagation
+"""Image Recognition using an Artificial Neural Network (Forward Prop/Back Prop)
 
     Note: We use numpy instead of pandas as there is no need for labels
          Since pixels will be unrolled, all we need is a matrix functionality
@@ -71,9 +71,10 @@ for i in range(len(train_set)):
 #Forward Prop
 Theta1 = random_init(input_layer_size, hidden_layer_size)
 Theta2 = random_init(hidden_layer_size, 10)         #x10 because we have 10 classes to tag
-print Theta1.shape, Theta2.shape
-#print train_set_array.shape
-#print test_set_array.shape
+
+train_set_array = np.insert(train_set_array, 0, np.ones(60000), 1)   #added ones for bias unit
+test_set_array = np.insert(test_set_array, 0, np.ones(10000), 1)     #added ones for bias unit
+
 
 
 #Algorithm End
