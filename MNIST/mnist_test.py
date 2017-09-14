@@ -22,7 +22,7 @@ os.system('cls')
 
 #Function definitions
 def sigmoid(z):
-    return 1/(1 + np.exp(-z))
+    return 1/(1 + np.exp(-1.0 * z))             #Overflow error
 
 def random_init(input_layer_size, hidden_layer_size, episilon = 0.12):
     """Will initialize random parameters for each unit in each layer to
@@ -69,12 +69,18 @@ for i in range(len(train_set)):
 
 #Algorithm Start
 #Forward Prop
+#Parameter Setup
 Theta1 = random_init(input_layer_size, hidden_layer_size)
 Theta2 = random_init(hidden_layer_size, 10)         #x10 because we have 10 classes to tag
 
 train_set_array = np.insert(train_set_array, 0, np.ones(60000), 1)   #added ones for bias unit
 test_set_array = np.insert(test_set_array, 0, np.ones(10000), 1)     #added ones for bias unit
+#Parameter Setup End
+#ANN
+train_matrix = np.asmatrix(train_set_array)
+test_matrix = np.asmatrix(test_set_array)
 
-
+Z_2 = np.dot(train_matrix, Theta1.T)
+A_2 = sigmoid(Z_2)
 
 #Algorithm End
