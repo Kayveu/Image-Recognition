@@ -22,6 +22,7 @@ os.system('cls')
 
 #Function definitions
 def sigmoid(z):
+    z = np.clip(z, -300, 300)
     return 1/(1 + np.exp(-1.0 * z))             #Overflow error
 
 def random_init(input_layer_size, hidden_layer_size, episilon = 0.12):
@@ -40,6 +41,10 @@ def read_idx(filename):
         zero, data_type, dims = struct.unpack('>HBB', f.read(4))
         shape = tuple(struct.unpack('>I', f.read(4))[0] for d in range(dims))
         return np.fromstring(f.read(), dtype=np.uint8).reshape(shape)
+
+def cost_func(prediction, y, lambda):
+    J = (1/m) * sum(sum((-y * log(prediction)) - ((1 - y) * log(1 - prediction))))
+
 
 #ML Implementation
 #Preprocessing Start
@@ -82,5 +87,10 @@ test_matrix = np.asmatrix(test_set_array)
 
 Z_2 = np.dot(train_matrix, Theta1.T)
 A_2 = sigmoid(Z_2)
+
+A_2 = np.insert(A_2, 0, np.ones(60000), 1)          #ones
+Z_3 = np.dot(A_2, Theta2.T)
+prediction = sigmoid(Z_3)
+
 
 #Algorithm End
