@@ -22,10 +22,6 @@ import struct, gzip, os, sys
 os.system('cls')
 
 #Function definitions
-def sigmoid(z):
-    z = np.clip(z, -300, 300)
-    return 1/(1 + np.exp(-1.0 * z))             #Overflow error
-
 def random_init(input_layer_size, hidden_layer_size, episilon = 0.12):
     """Will initialize random parameters for each unit in each layer to
         ensure high likelyhood of algorithm converging
@@ -82,6 +78,8 @@ test_set_array = np.insert(test_set_array, 0, np.ones(len(test_set_array)), 1)  
 train_matrix = np.asmatrix(train_set_array)
 test_matrix = np.asmatrix(test_set_array)
 
+J = cf.cost_func(train_matrix, train_labels, lamb = 0, theta1 = Theta1, theta2 = Theta2)
 
+print J
 
 #Algorithm End
