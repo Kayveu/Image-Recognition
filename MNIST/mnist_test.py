@@ -15,6 +15,7 @@
 """
 
 import numpy as np
+import CostFunction as cf
 import struct, gzip, os, sys
 
 #Clearing interpreter
@@ -41,12 +42,6 @@ def read_idx(filename):
         zero, data_type, dims = struct.unpack('>HBB', f.read(4))
         shape = tuple(struct.unpack('>I', f.read(4))[0] for d in range(dims))
         return np.fromstring(f.read(), dtype=np.uint8).reshape(shape)
-
-def cost_func(prediction, y, lamb, theta1, theta2):
-    J = (1/m) * sum(sum((-y * log(prediction)) - ((1 - y) * log(1 - prediction))))
-    t1_fix = np.delete(theta1, 0, axis = 1)
-    t2_fix = np.delete(theta2, 0, axis = 1)
-    return J + (lamb / (2 * m)) * (sum(sum(np.square(t1_fix))) + sum(sum(np.square(t2_fix))))
 
 #ML Implementation
 #Preprocessing Start
@@ -80,19 +75,13 @@ for i in range(len(train_set)):
 Theta1 = random_init(input_layer_size, hidden_layer_size)
 Theta2 = random_init(hidden_layer_size, 10)         #x10 because we have 10 classes to tag
 
-train_set_array = np.insert(train_set_array, 0, np.ones(60000), 1)   #added ones for bias unit
-test_set_array = np.insert(test_set_array, 0, np.ones(10000), 1)     #added ones for bias unit
+train_set_array = np.insert(train_set_array, 0, np.ones(len(train_set_array)), 1)   #added ones for bias unit
+test_set_array = np.insert(test_set_array, 0, np.ones(len(test_set_array)), 1)     #added ones for bias unit
 #Parameter Setup End
 #ANN
 train_matrix = np.asmatrix(train_set_array)
 test_matrix = np.asmatrix(test_set_array)
 
-Z_2 = np.dot(train_matrix, Theta1.T)
-A_2 = sigmoid(Z_2)
-
-A_2 = np.insert(A_2, 0, np.ones(60000), 1)          #ones
-Z_3 = np.dot(A_2, Theta2.T)
-prediction = sigmoid(Z_3)
 
 
 #Algorithm End
