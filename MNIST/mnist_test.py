@@ -42,9 +42,11 @@ def read_idx(filename):
         shape = tuple(struct.unpack('>I', f.read(4))[0] for d in range(dims))
         return np.fromstring(f.read(), dtype=np.uint8).reshape(shape)
 
-def cost_func(prediction, y, lambda):
+def cost_func(prediction, y, lamb, theta1, theta2):
     J = (1/m) * sum(sum((-y * log(prediction)) - ((1 - y) * log(1 - prediction))))
-
+    t1_fix = np.delete(theta1, 0, axis = 1)
+    t2_fix = np.delete(theta2, 0, axis = 1)
+    return J + (lamb / (2 * m)) * (sum(sum(np.square(t1_fix))) + sum(sum(np.square(t2_fix))))
 
 #ML Implementation
 #Preprocessing Start
